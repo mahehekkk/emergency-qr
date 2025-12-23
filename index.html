@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Emergency Identity</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .card {
+      margin-top: 15px;
+      padding: 12px;
+      background: #f9f9f9;
+      border-radius: 6px;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    #qr {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .emergency {
+      background: #ffe6e6;
+      border-left: 5px solid red;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container" id="registerSection">
+  <h2>Register Person</h2>
+
+  <input id="name" placeholder="Name">
+  <input id="age" placeholder="Age">
+  <input id="condition" placeholder="Condition (e.g. Dementia)">
+  <input id="phone" placeholder="Emergency Contact Number">
+  <input id="relation" placeholder="Relation (Son, Daughter, etc.)">
+
+  <button onclick="generateQR()">Generate QR Code</button>
+
+  <div id="qr"></div>
+</div>
+
+<div class="container" id="viewSection" style="display:none;">
+  <div class="emergency">
+    ⚠️ This person may be disoriented. Please contact their family.
+  </div>
+
+  <h2>Person Details</h2>
+
+  <div class="card"><span class="label">Name:</span> <span id="vName"></span></div>
+  <div class="card"><span class="label">Age:</span> <span id="vAge"></span></div>
+  <div class="card"><span class="label">Condition:</span> <span id="vCondition"></span></div>
+  <div class="card"><span class="label">Emergency Contact:</span> <span id="vPhone"></span></div>
+  <div class="card"><span class="label">Relation:</span> <span id="vRelation"></span></div>
+
+  <p style="text-align:center; margin-top:15px;">
+    📞 Please call the emergency contact to help this person.
+  </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+
+<script>
+function generateQR() {
+  const name = document.getElementById("name").value;
+  const age = document.getElementById("age").value;
+  const condition = document.getElementById("condition").value;
+  const phone = document.getElementById("phone").value;
+  const relation = document.getElementById("relation").value;
+
+  const url =
+    window.location.origin +
+    window.location.pathname +
+    `?name=${encodeURIComponent(name)}` +
+    `&age=${encodeURIComponent(age)}` +
+    `&condition=${encodeURIComponent(condition)}` +
+    `&phone=${encodeURIComponent(phone)}` +
+    `&relation=${encodeURIComponent(relation)}`;
+
+  document.getElementById("qr").innerHTML = "";
+  new QRCode(document.getElementById("qr"), {
+    text: url,
+    width: 200,
+    height: 200
+  });
+}
+
+function loadFromQR() {
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has("name")) return;
+
+  document.getElementById("registerSection").style.display = "none";
+  document.getElementById("viewSection").style.display = "block";
+
+  document.getElementById("vName").innerText = params.get("name");
+  document.getElementById("vAge").innerText = params.get("age");
+  document.getElementById("vCondition").innerText = params.get("condition");
+  document.getElementById("vPhone").innerText = params.get("phone");
+  document.getElementById("vRelation").innerText = params.get("relation");
+}
+
+loadFromQR();
+</script>
+
+</body>
+</html>
