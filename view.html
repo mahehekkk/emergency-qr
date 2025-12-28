@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Emergency Help</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #fff3f3;
+    }
+    .card {
+      max-width: 400px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #999;
+    }
+    .alert {
+      background: #ffdddd;
+      padding: 10px;
+      border-left: 5px solid red;
+      margin-bottom: 15px;
+    }
+    a {
+      color: black;
+      font-weight: bold;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="alert">
+    ⚠️ This person may be disoriented. Please help.
+  </div>
+
+  <p><b>Name:</b> <span id="name"></span></p>
+  <p><b>Age:</b> <span id="age"></span></p>
+  <p><b>Condition:</b> <span id="condition"></span></p>
+
+  <hr>
+
+  <p><b>Emergency Contact:</b></p>
+  <p><span id="relation"></span></p>
+  <p>📞 <a id="contact"></a></p>
+
+  <p style="margin-top: 15px;">
+    Please contact the family immediately.
+  </p>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+
+document.getElementById("name").innerText = params.get("name");
+document.getElementById("age").innerText = params.get("age");
+document.getElementById("condition").innerText = params.get("condition");
+document.getElementById("relation").innerText = params.get("relation");
+
+const phone = params.get("contact");
+const link = document.getElementById("contact");
+link.innerText = phone;
+link.href = "tel:" + phone;
+</script>
+
+</body>
+</html>
